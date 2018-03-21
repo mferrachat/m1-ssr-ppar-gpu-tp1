@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
     CUDA_SAFE_CALL(cudaEventRecord(start, 0));
 
     // Execute kernel
-    // TODO
+	summation_kernel<<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
 
     // Stop timer
     CUDA_SAFE_CALL(cudaEventRecord(stop, 0));
