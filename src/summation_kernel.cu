@@ -9,7 +9,7 @@ __global__ void summation_kernel(int data_size, float * data_out)
 	
 	for(int i = data_chunk*(tid+1); i >= data_chunk*tid; i--)
 		result = i%2 ? result-1.0/(i+1) : result+1.0/(i+1);
-	*data_out = result;
+	data_out[tid] = result;
 }
 
 
