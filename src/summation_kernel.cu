@@ -12,6 +12,15 @@ template <unsigned int blockSize> __global__ void summation_kernel(int data_size
 		result = i%2 ? result-1.0/(i+1) : result+1.0/(i+1);
 	data_out[id] = result;
 	
+	__syncthreads();
+	
+	if(blockSize >= 1024)
+	{
+		if (tid < 512)
+			data_out[id] += data_out[id+512];
+		__syncthreads();
+	}
+	
 	if(blockSize >= 512)
 	{
 		if (tid < 256)
