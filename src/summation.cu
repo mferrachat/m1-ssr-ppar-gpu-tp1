@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
     int results_size = num_threads;
     float * data_out_cpu;
     // Allocating output data on CPU
-	data_out_cpu = malloc(results_size*sizeof(float));
+	data_out_cpu = (float *) malloc(results_size*sizeof(float));
 
 	// Allocating output data on GPU
 	float *data_gpu;
