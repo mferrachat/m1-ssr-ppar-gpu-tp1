@@ -1,8 +1,9 @@
 
 // GPU kernel
-__global__ void summation_kernel(int data_size, float * data_out)
+template <unsigned int blockSize> __global__ void summation_kernel(int data_size, float * data_out)
 {
-	int id = blockIdx.x * blockDim.x + threadIdx.x;
+	unsigned int tid = threadIdx.x;
+	int id = blockIdx.x * blockSize + tid;
 	int data_chunk = data_size / (blockDim.x * gridDim.x);
 	
 	float result = 0.0;
@@ -10,14 +11,6 @@ __global__ void summation_kernel(int data_size, float * data_out)
 	for(int i = data_chunk*(id+1); i >= data_chunk*id; i--)
 		result = i%2 ? result-1.0/(i+1) : result+1.0/(i+1);
 	data_out[id] = result;
-}
-
-template <unsigned int blockSize> __global__ void reduce_block(float * data_out)
-{
-	unsigned int tid = threadIdx.x;
-	unsigned int id = blockIdx.x * blockSize * 2 + tid;
-	
-	data_out[id] += data_out[id+blockSize];
 	
 	if(blockSize >= 1024)
 	{
@@ -58,7 +51,7 @@ template <unsigned int blockSize> __global__ void reduce_block(float * data_out)
 	}
 }
 
-__global__ void reduce_grid()
+__global__ void reduce_grid(int block_size, float * data_out)
 {
 	
 }
