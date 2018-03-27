@@ -26,8 +26,8 @@ int main(int argc, char ** argv)
     printf(" time=%fs\n", end_time - start_time);
     
     // Parameter definition
-    const int threads_per_block = 4 * 32;
-    const int blocks_in_grid = 8;
+    int threads_per_block = 4 * 32;
+    int blocks_in_grid = 8;
     
     int num_threads = threads_per_block * blocks_in_grid;
 
