@@ -26,8 +26,8 @@ int main(int argc, char ** argv)
     printf(" time=%fs\n", end_time - start_time);
     
     // Parameter definition
-    int threads_per_block = 4 * 32;
-    int blocks_in_grid = 8;
+    const int threads_per_block = 4 * 32;
+    const int blocks_in_grid = 8;
     
     int num_threads = threads_per_block * blocks_in_grid;
 
@@ -50,7 +50,7 @@ int main(int argc, char ** argv)
 
     // Execute kernel
 	summation_kernel<<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
-	//reduce_block<threads_per_block/2><<<blocks_in_grid, threads_per_block/2>>>(data_gpu);
+	reduce_block<threads_per_block/2><<<blocks_in_grid, threads_per_block/2>>>(data_gpu);
 
     // Stop timer
     CUDA_SAFE_CALL(cudaEventRecord(stop, 0));
@@ -61,7 +61,7 @@ int main(int argc, char ** argv)
     
     // Finish reduction
 	float sum = 0.;
-	for(int i = 0; i < results_size; i++)
+	for(int i = 0; i < results_size; i+=threads_per_block)
 		sum += data_out_cpu[i];
     
     // Cleanup
