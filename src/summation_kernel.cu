@@ -1,6 +1,6 @@
 
 // GPU kernel
-template <unsigned int blockSize> __global__ void summation_kernel(int data_size, float * data_out)
+__global__ void summation_kernel(int data_size, float * data_out)
 {
 	unsigned int tid = threadIdx.x;
 	unsigned int id = blockIdx.x * blockDim.x + threadIdx.x;
