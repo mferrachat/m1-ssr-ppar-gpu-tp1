@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
     CUDA_SAFE_CALL(cudaEventRecord(start, 0));
 
     // Execute kernel
-	summation_kernel<<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
+	summation_kernel<threads_per_block><<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
 
     // Stop timer
     CUDA_SAFE_CALL(cudaEventRecord(stop, 0));
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
     
     // Finish reduction
 	float sum = 0.;
-	for(int i = 0; i < results_size; i++)
+	for(int i = 0; i < results_size; i+=threads_per_block)
 		sum += data_out_cpu[i];
     
     // Cleanup
