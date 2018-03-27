@@ -60,8 +60,8 @@ int main(int argc, char ** argv)
     
     // Finish reduction
 	float sum = 0.;
-	for(int i = results_size; i > 0; i--)
-		sum += data_out_cpu[i-1];
+	for(int i = 0; i < results_size; i++)
+		sum += data_out_cpu[i];
     
     // Cleanup
     free(data_out_cpu);
