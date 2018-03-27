@@ -2,7 +2,6 @@
 // GPU kernel
 __global__ void summation_kernel(int data_size, float * data_out)
 {
-	unsigned int tid = threadIdx.x;
 	unsigned int id = blockIdx.x * blockDim.x + threadIdx.x;
 	unsigned int data_chunk = data_size / (blockDim.x * gridDim.x);
 	
