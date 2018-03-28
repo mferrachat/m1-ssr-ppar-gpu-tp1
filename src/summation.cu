@@ -37,9 +37,10 @@ int main(int argc, char ** argv)
     CUDA_SAFE_CALL(cudaEventCreate(&stop));
 
     int results_size = num_threads;
-    float * data_out_cpu;
+    //float * data_out_cpu;
+	float sum = 0.;
     // Allocating output data on CPU
-	data_out_cpu = (float *) malloc(results_size*sizeof(float));
+	//data_out_cpu = (float *) malloc(results_size*sizeof(float));
 
 	// Allocating output data on GPU
 	float *data_gpu;
@@ -50,21 +51,22 @@ int main(int argc, char ** argv)
 
     // Execute kernel
 	summation_kernel<threads_per_block><<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
+	reduce_grid<blocks_in_grid/2><<<1, blocks_in_grid/2>>>(blocks_in_grid, data_size/blocks_in_grid, data_gpu);
 
     // Stop timer
     CUDA_SAFE_CALL(cudaEventRecord(stop, 0));
     CUDA_SAFE_CALL(cudaEventSynchronize(stop));
 
     // Get results back
-	CUDA_SAFE_CALL(cudaMemcpy(data_out_cpu, data_gpu, num_threads*sizeof(float), cudaMemcpyDeviceToHost));
-    
+	//CUDA_SAFE_CALL(cudaMemcpy(data_out_cpu, data_gpu, num_threads*sizeof(float), cudaMemcpyDeviceToHost));
+    CUDA_SAFE_CALL(cudaMemcpy(sum, data_gpu, sizeof(float), cudaMemcpyDeviceToHost));
+	
     // Finish reduction
-	float sum = 0.;
-	for(int i = 0; i < results_size; i+=threads_per_block)
-		sum += data_out_cpu[i];
+	/* for(int i = 0; i < results_size; i+=threads_per_block)
+		sum += data_out_cpu[i]; */
     
     // Cleanup
-    free(data_out_cpu);
+    //free(data_out_cpu);
     CUDA_SAFE_CALL(cudaFree(data_gpu));
     
     
