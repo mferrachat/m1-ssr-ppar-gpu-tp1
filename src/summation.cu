@@ -50,8 +50,8 @@ int main(int argc, char ** argv)
     CUDA_SAFE_CALL(cudaEventRecord(start, 0));
 
     // Execute kernel
-	summation_kernel<threads_per_block><<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
-	reduce_grid<blocks_in_grid/2><<<1, blocks_in_grid/2>>>(blocks_in_grid, data_size/blocks_in_grid, data_gpu);
+	summation_kernel<<<blocks_in_grid, threads_per_block>>>(data_size, data_gpu);
+	reduce_grid<<<1, blocks_in_grid/2>>>(blocks_in_grid, data_size/blocks_in_grid, data_gpu);
 
     // Stop timer
     CUDA_SAFE_CALL(cudaEventRecord(stop, 0));
