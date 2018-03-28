@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
 
     // Get results back
 	//CUDA_SAFE_CALL(cudaMemcpy(data_out_cpu, data_gpu, num_threads*sizeof(float), cudaMemcpyDeviceToHost));
-    CUDA_SAFE_CALL(cudaMemcpy(sum, data_gpu, sizeof(float), cudaMemcpyDeviceToHost));
+    CUDA_SAFE_CALL(cudaMemcpy(&sum, data_gpu, sizeof(float), cudaMemcpyDeviceToHost));
 	
     // Finish reduction
 	/* for(int i = 0; i < results_size; i+=threads_per_block)
